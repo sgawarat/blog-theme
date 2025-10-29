@@ -1,0 +1,72 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.1/schema.json",
+  "files": {
+    "includes": ["**", "!node_modules", "!dist"]
+  },
+  "vcs": {
+    "useIgnoreFile": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": "on",
+      "complexity": "on",
+      "correctness": "on",
+      "security": "on",
+      "performance": "on",
+      "style": "on",
+      "suspicious": "on"
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "useEditorconfig": true
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "recommended": true,
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {}
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            // 型定義に合わせるかたちでindex signatureも使いたい
+            "useLiteralKeys": "off"
+          },
+          "correctness": {
+            "noNodejsModules": "off"
+          },
+          "security": {
+            // ご判定が多い？
+            "noSecrets": "off"
+          },
+          "style": {
+            // 一行のif文を許可したい
+            "useBlockStatements": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.config.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    }
+  ]
+}

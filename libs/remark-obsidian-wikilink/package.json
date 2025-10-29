@@ -1,0 +1,59 @@
+{
+  "name": "@sgawarat/remark-obsidian-wikilink",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "A remark plugin to add support for Obsidian-style wikilink syntax, like `[[path#heading|text]]`.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./syntax": {
+      "import": "./dist/syntax.js",
+      "types": "./dist/syntax.d.ts"
+    },
+    "./fromMarkdown": {
+      "import": "./dist/fromMarkdown.js",
+      "types": "./dist/fromMarkdown.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "!*.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsgo",
+    "test": "vitest run",
+    "lint": "biome lint .",
+    "format": "biome format .",
+    "fix": "biome lint --write ."
+  },
+  "keywords": [
+    "markdown",
+    "remark",
+    "remark-plugin",
+    "obsidian",
+    "wikilink"
+  ],
+  "author": "sgawarat",
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.1",
+    "@types/node": "^24.9.1",
+    "@typescript/native-preview": "7.0.0-dev.20251026.1",
+    "micromark": "^4.0.2",
+    "remark": "^15.0.1",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@types/mdast": "^4.0.4",
+    "mdast-util-from-markdown": "^2.0.2",
+    "micromark-util-symbol": "^2.0.1",
+    "micromark-util-types": "^2.0.2",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0",
+    "vfile": "^6.0.3"
+  }
+}

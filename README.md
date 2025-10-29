@@ -1,1 +1,1 @@
-# blog-theme
+# @sgawarat/blog-theme

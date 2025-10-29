@@ -1,0 +1,33 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+
+    "module": "nodenext",
+    "noUncheckedSideEffectImports": true,
+    "resolveJsonModule": true,
+    "rewriteRelativeImportExtensions": true,
+
+    "declaration": true,
+
+    "erasableSyntaxOnly": true,
+    "isolatedDeclarations": true,
+    "verbatimModuleSyntax": true,
+
+    "lib": [
+      "ESNext"
+    ],
+
+    "incremental": true,
+
+    "skipLibCheck": true,
+  }
+}
