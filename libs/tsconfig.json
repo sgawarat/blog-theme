@@ -1,5 +1,7 @@
 {
   "$schema": "https://www.schemastore.org/tsconfig",
+  "include": ["${configDir}/src/**/*"],
+  "exclude": ["${configDir}/src/**/*.test.ts"],
   "compilerOptions": {
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
@@ -17,6 +19,7 @@
     "rewriteRelativeImportExtensions": true,
 
     "declaration": true,
+    "outDir": "${configDir}/dist",
 
     "erasableSyntaxOnly": true,
     "isolatedDeclarations": true,
