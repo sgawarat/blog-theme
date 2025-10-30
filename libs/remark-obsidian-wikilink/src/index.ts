@@ -8,12 +8,19 @@ import { visit } from "unist-util-visit";
 import { obsidianWikilinkFromMarkdown } from "./fromMarkdown.ts";
 import { obsidianWikilinkSyntax } from "./syntax.ts";
 import { PathResolver } from "./utils/resolve.ts";
+import { findShortestPath } from "./utils/find.ts";
 
 declare module "unified" {
   interface Data {
     micromarkExtensions?: MicromarkExtension[];
     fromMarkdownExtensions?: FromMarkdownExtension[];
   }
+}
+
+export function createGlob(
+  rootDir: string,
+): (name: string, sourceDir: string) => string | undefined {
+  return (name, sourceDir) => findShortestPath(name, rootDir, sourceDir);
 }
 
 export interface ObsidianWikilinkRemarkOptions {
