@@ -18,19 +18,16 @@
     "resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
 
-    "declaration": true,
     "outDir": "${configDir}/dist",
 
     "erasableSyntaxOnly": true,
     "isolatedDeclarations": true,
     "verbatimModuleSyntax": true,
 
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
 
-    "incremental": true,
+    "composite": true,
 
-    "skipLibCheck": true,
+    "skipLibCheck": true
   }
 }

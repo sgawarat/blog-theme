@@ -3,24 +3,24 @@
   "type": "module",
   "version": "0.1.0",
   "description": "A remark plugin to add support for Aozora Bunko-style ruby (annotation) syntax, like `｜base《ruby》`.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
     },
     "./syntax": {
-      "import": "./dist/syntax.js",
-      "types": "./dist/syntax.d.ts"
+      "import": "./dist/src/syntax.js",
+      "types": "./dist/src/syntax.d.ts"
     },
     "./fromMarkdown": {
-      "import": "./dist/fromMarkdown.js",
-      "types": "./dist/fromMarkdown.d.ts"
+      "import": "./dist/src/fromMarkdown.js",
+      "types": "./dist/src/fromMarkdown.d.ts"
     }
   },
   "files": [
-    "dist",
+    "./dist/src",
     "!*.tsbuildinfo"
   ],
   "scripts": {
