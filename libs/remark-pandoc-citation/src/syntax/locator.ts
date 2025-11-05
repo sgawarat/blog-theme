@@ -6,7 +6,7 @@ import type {
   State,
   TokenizeContext,
 } from "micromark-util-types";
-import {} from "./common.ts";
+import type {} from "./common.ts";
 
 /**
  * 括弧に囲まれていないlocatorをトークン化する。
@@ -47,6 +47,7 @@ export function tokenizeLocatorWithCurlyBrackets(
   // 開き括弧
   function open(code: Code): State | undefined {
     if (code !== codes.leftCurlyBrace) return nok(code);
+    effects.enter("pandocCitationLocatorOuter");
     effects.enter("pandocCitationOpen");
     effects.consume(code);
     effects.exit("pandocCitationOpen");
@@ -79,6 +80,7 @@ export function tokenizeLocatorWithCurlyBrackets(
     effects.enter("pandocCitationClose");
     effects.consume(code);
     effects.exit("pandocCitationClose");
+    effects.exit("pandocCitationLocatorOuter");
     return ok;
   }
 }
@@ -103,6 +105,7 @@ export function tokenizeLocatorWithSquareBrackets(
   // 開き括弧
   function open(code: Code): State | undefined {
     if (code !== codes.leftSquareBracket) return nok(code);
+    effects.enter("pandocCitationLocatorOuter");
     effects.enter("pandocCitationOpen");
     effects.consume(code);
     effects.exit("pandocCitationOpen");
@@ -137,6 +140,7 @@ export function tokenizeLocatorWithSquareBrackets(
     effects.enter("pandocCitationClose");
     effects.consume(code);
     effects.exit("pandocCitationClose");
+    effects.exit("pandocCitationLocatorOuter");
     return ok;
   }
 }

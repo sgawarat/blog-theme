@@ -11,12 +11,12 @@
       "types": "./dist/src/index.d.ts"
     },
     "./syntax": {
-      "import": "./dist/src/syntax.js",
-      "types": "./dist/src/syntax.d.ts"
+      "import": "./dist/src/syntax/index.js",
+      "types": "./dist/src/syntax/index.d.ts"
     },
     "./fromMarkdown": {
-      "import": "./dist/src/fromMarkdown.js",
-      "types": "./dist/src/fromMarkdown.d.ts"
+      "import": "./dist/src/fromMarkdown/index.js",
+      "types": "./dist/src/fromMarkdown/index.d.ts"
     }
   },
   "files": [
@@ -43,6 +43,7 @@
     "@biomejs/biome": "^2.3.2",
     "@types/node": "^24.9.2",
     "@typescript/native-preview": "7.0.0-dev.20251026.1",
+    "mdast-util-to-hast": "^13.2.0",
     "micromark": "^4.0.2",
     "remark": "^15.0.1",
     "vitest": "^3.2.4"

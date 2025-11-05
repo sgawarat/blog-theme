@@ -6,7 +6,7 @@ import type {
   State,
   TokenizeContext,
 } from "micromark-util-types";
-import {} from "./common.ts";
+import type {} from "./common.ts";
 
 /**
  * IDに含めることができる文字と約物の正規表現。
