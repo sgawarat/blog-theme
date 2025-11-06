@@ -11,15 +11,15 @@ export function pandocCitationSyntax(): Extension {
   return {
     text: {
       [codes.dash]: {
-        name: "pandocCitationInText+SuppressAuthor",
+        name: "PandocCitationInText+SuppressAuthor",
         tokenize: tokenizeCitationInText,
       },
       [codes.atSign]: {
-        name: "pandocCitationInText",
+        name: "PandocCitationInText",
         tokenize: tokenizeCitationInText,
       },
       [codes.leftSquareBracket]: {
-        name: "pandocCitation",
+        name: "PandocCitation",
         tokenize: tokenizeCitation,
       },
     },

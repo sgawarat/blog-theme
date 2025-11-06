@@ -140,7 +140,7 @@ test("citation", () => {
 
 test("citation with prefix", () => {
   expect(micromark("[prefix @id]", opts)).eq(
-    '<p><cite "[prefix @id]"><open "["></open><item "prefix @id"><prefix "prefix "></prefix><idPrefix "@"></idPrefix><id "id"></id></item><close "]"></close></cite></p>',
+    '<p><cite "[prefix @id]"><open "["></open><item "prefix @id"><prefix "prefix"></prefix><space " "></space><idPrefix "@"></idPrefix><id "id"></id></item><close "]"></close></cite></p>',
   );
 });
 
@@ -152,7 +152,7 @@ test("citation with suffix", () => {
 
 test("citation with prefix and suffix", () => {
   expect(micromark("[prefix @id, suffix]", opts)).eq(
-    '<p><cite "[prefix @id, suffix]"><open "["></open><item "prefix @id, suffix"><prefix "prefix "></prefix><idPrefix "@"></idPrefix><id "id"></id><comma ","></comma><space " "></space><suffix "suffix"></suffix></item><close "]"></close></cite></p>',
+    '<p><cite "[prefix @id, suffix]"><open "["></open><item "prefix @id, suffix"><prefix "prefix"></prefix><space " "></space><idPrefix "@"></idPrefix><id "id"></id><comma ","></comma><space " "></space><suffix "suffix"></suffix></item><close "]"></close></cite></p>',
   );
 });
 
@@ -176,7 +176,7 @@ test("citation with locator + whitespace + comma", () => {
 
 test("citation with all options", () => {
   expect(micromark("[prefix @id, {locator} suffix]", opts)).eq(
-    '<p><cite "[prefix @id, {locator} suffix]"><open "["></open><item "prefix @id, {locator} suffix"><prefix "prefix "></prefix><idPrefix "@"></idPrefix><id "id"></id><comma ","></comma><space " "></space><locatorOuter "{locator}"><open "{"></open><locator "locator"></locator><close "}"></close></locatorOuter><suffix " suffix"></suffix></item><close "]"></close></cite></p>',
+    '<p><cite "[prefix @id, {locator} suffix]"><open "["></open><item "prefix @id, {locator} suffix"><prefix "prefix"></prefix><space " "></space><idPrefix "@"></idPrefix><id "id"></id><comma ","></comma><space " "></space><locatorOuter "{locator}"><open "{"></open><locator "locator"></locator><close "}"></close></locatorOuter><space " "></space><suffix "suffix"></suffix></item><close "]"></close></cite></p>',
   );
 });
 

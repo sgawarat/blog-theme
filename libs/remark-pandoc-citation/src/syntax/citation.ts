@@ -7,7 +7,7 @@ import type {
   TokenizeContext,
 } from "micromark-util-types";
 import { tokenizeWhitespaces } from "./common.ts";
-import { tokenizeId, tokenizeIdPrefix } from "./id.ts";
+import { tokenizeIdBody, tokenizeIdPrefix } from "./id.ts";
 import {
   tokenizeLocatorWithCurlyBrackets,
   tokenizeLocatorWithoutBrackets,
@@ -19,7 +19,7 @@ import {
  * `;`か`]`が見つかったとき、okで制御を返す。
  * `\n`かEOFが見つかったとき、nokで制御を返す。
  *
- * `/(?<suffix>[^;\]\n]*?)(?<whitespaces>\s*)/`
+ * `/(?<whitespaces>\s*)(?<suffix>[^;\]\n]*?)(?<whitespaces>\s*)/`
  */
 function tokenizeSuffix(
   this: TokenizeContext,
@@ -27,7 +27,7 @@ function tokenizeSuffix(
   ok: State,
   nok: State,
 ): State {
-  const finish = effects.attempt(
+  const exit = effects.attempt(
     {
       tokenize(effects, ok, nok) {
         effects.exit("pandocCitationSuffix");
@@ -48,10 +48,10 @@ function tokenizeSuffix(
     (code) => {
       if (isBreak(code)) return nok(code);
       effects.consume(code);
-      return finish;
+      return exit;
     },
   );
-  const start = effects.attempt(
+  const enter = effects.attempt(
     {
       tokenize(effects, ok, nok) {
         return tokenizeWhitespaces.call(
@@ -72,10 +72,10 @@ function tokenizeSuffix(
       if (isBreak(code)) return nok(code);
       effects.enter("pandocCitationSuffix");
       effects.consume(code);
-      return finish;
+      return exit;
     },
   );
-  return start;
+  return tokenizeWhitespaces.call(this, effects, enter, nok);
 
   function isBreak(code: Code): code is null {
     return code === null || code <= codes.carriageReturnLineFeed;
@@ -119,7 +119,7 @@ function tokenizeLocatorAfterId(
  * `@`か`-@`が見つかったとき、okで制御を返す。
  * `;`、`]`、`\n`、EOFのいずれかが見つかったとき、nokで制御を返す。
  *
- * `/(?<whitespaces>\s*)(?<prefix>[^;\]\n]*?)(?<idPrefix>-@|@)/`
+ * `/(?<whitespaces>\s*)(?<prefix>[^;\]\n]*?)(?<whitespaces>\s*)(?<idPrefix>-@|@)/`
  */
 function tokenizePrefix(
   this: TokenizeContext,
@@ -127,23 +127,35 @@ function tokenizePrefix(
   ok: State,
   nok: State,
 ): State {
-  const exit = effects.check(
+  const exit = effects.attempt(
     {
-      tokenize: tokenizeIdPrefix,
+      tokenize(effects, ok, nok) {
+        effects.exit("pandocCitationPrefix");
+        return tokenizeWhitespaces.call(
+          this,
+          effects,
+          tokenizeIdPrefix.call(this, effects, ok, nok),
+          nok,
+        );
+      },
     },
-    (code) => {
-      effects.exit("pandocCitationPrefix");
-      return ok(code);
-    },
+    ok,
     (code) => {
       if (isBreak(code)) return nok(code);
       effects.consume(code);
       return exit;
     },
   );
-  const enter = effects.check(
+  const enter = effects.attempt(
     {
-      tokenize: tokenizeIdPrefix,
+      tokenize(effects, ok, nok) {
+        return tokenizeWhitespaces.call(
+          this,
+          effects,
+          tokenizeIdPrefix.call(this, effects, ok, nok),
+          nok,
+        );
+      },
     },
     ok,
     (code) => {
@@ -185,8 +197,8 @@ function tokenizeCitationItem(
     suffix,
     suffix,
   );
-  const id = tokenizeId.call(this, effects, optionalLocator, nok);
-  const prefix = tokenizePrefix.call(this, effects, id, nok);
+  const idBody = tokenizeIdBody.call(this, effects, optionalLocator, nok);
+  const prefix = tokenizePrefix.call(this, effects, idBody, nok);
   return (code) => {
     effects.enter("pandocCitationItem");
     return prefix(code);

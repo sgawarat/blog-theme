@@ -213,3 +213,22 @@ export function tokenizeId(
     nok,
   );
 }
+
+/**
+ * IDの本文をトークン化する。
+ */
+export function tokenizeIdBody(
+  this: TokenizeContext,
+  effects: Effects,
+  ok: State,
+  nok: State,
+): State {
+  return effects.attempt(
+    [
+      { tokenize: tokenizeIdBodyWithCurlyBrackets },
+      { tokenize: tokenizeIdBodyWithoutBrackets },
+    ],
+    ok,
+    nok,
+  );
+}
