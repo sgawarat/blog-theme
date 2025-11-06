@@ -10,7 +10,6 @@ import type {
 declare module "micromark-util-types" {
   interface TokenTypeMap {
     pandocCitation: "pandocCitation";
-    pandocCitationInText: "pandocCitationInText";
     pandocCitationOpen: "pandocCitationOpen";
     pandocCitationClose: "pandocCitationClose";
     pandocCitationItem: "pandocCitationItem";
@@ -23,6 +22,10 @@ declare module "micromark-util-types" {
     pandocCitationItemDelimiter: "pandocCitationItemDelimiter";
     pandocCitationComma: "pandocCitationComma";
     pandocCitationWhitespaces: "pandocCitationWhitespaces";
+  }
+
+  interface Token {
+    _pandocCitationInText?: true | undefined;
   }
 }
 

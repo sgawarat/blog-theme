@@ -40,7 +40,8 @@ export function tokenizeCitationInText(
     {
       tokenize(effects, ok, nok) {
         const exit: State = (code) => {
-          effects.exit("pandocCitationInText");
+          effects.exit("pandocCitationItem");
+          effects.exit("pandocCitation");
           return ok(code);
         };
         const optionalLocator = tokenizeLocatorAfterId.call(
@@ -51,7 +52,8 @@ export function tokenizeCitationInText(
         );
         const id = tokenizeId.call(this, effects, optionalLocator, nok);
         return (code) => {
-          effects.enter("pandocCitationInText");
+          effects.enter("pandocCitation", { _pandocCitationInText: true });
+          effects.enter("pandocCitationItem");
           return id(code);
         };
       },

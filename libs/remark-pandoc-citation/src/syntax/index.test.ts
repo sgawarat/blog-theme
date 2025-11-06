@@ -10,10 +10,9 @@ const opts: Options = {
     {
       enter: {
         pandocCitation(token: Token) {
-          this.tag(`<cite "${this.sliceSerialize(token)}">`);
-        },
-        pandocCitationInText(token: Token) {
-          this.tag(`<citeInText "${this.sliceSerialize(token)}">`);
+          this.tag(
+            `<cite${token._pandocCitationInText ? " inText" : ""} "${this.sliceSerialize(token)}">`,
+          );
         },
         pandocCitationOpen(token: Token) {
           this.tag(`<open "${this.sliceSerialize(token)}">`);
@@ -55,9 +54,6 @@ const opts: Options = {
       exit: {
         pandocCitation(_token: Token) {
           this.tag("</cite>");
-        },
-        pandocCitationInText(_token: Token) {
-          this.tag("</citeInText>");
         },
         pandocCitationOpen(_token: Token) {
           this.tag("</open>");
@@ -102,37 +98,37 @@ const opts: Options = {
 
 test("ID and single internal punctuation", () => {
   expect(micromark("@a.b", opts)).eq(
-    '<p><citeInText "@a.b"><idPrefix "@"></idPrefix><id "a.b"></id></citeInText></p>',
+    '<p><cite inText "@a.b"><item "@a.b"><idPrefix "@"></idPrefix><id "a.b"></id></item></cite></p>',
   );
 });
 
 test("ID and multiple internal punctuations", () => {
   expect(micromark("@a..b", opts)).eq(
-    '<p><citeInText "@a"><idPrefix "@"></idPrefix><id "a"></id></citeInText>..b</p>',
+    '<p><cite inText "@a"><item "@a"><idPrefix "@"></idPrefix><id "a"></id></item></cite>..b</p>',
   );
 });
 
 test("ID and final punctuation", () => {
   expect(micromark("@a.", opts)).eq(
-    '<p><citeInText "@a"><idPrefix "@"></idPrefix><id "a"></id></citeInText>.</p>',
+    '<p><cite inText "@a"><item "@a"><idPrefix "@"></idPrefix><id "a"></id></item></cite>.</p>',
   );
 });
 
 test("ID with braces", () => {
   expect(micromark("@{a..b.}", opts)).eq(
-    '<p><citeInText "@{a..b.}"><idPrefix "@"></idPrefix><open "{"></open><id "a..b."></id><close "}"></close></citeInText></p>',
+    '<p><cite inText "@{a..b.}"><item "@{a..b.}"><idPrefix "@"></idPrefix><open "{"></open><id "a..b."></id><close "}"></close></item></cite></p>',
   );
 });
 
 test("author-in-text citation", () => {
   expect(micromark("@id", opts)).eq(
-    '<p><citeInText "@id"><idPrefix "@"></idPrefix><id "id"></id></citeInText></p>',
+    '<p><cite inText "@id"><item "@id"><idPrefix "@"></idPrefix><id "id"></id></item></cite></p>',
   );
 });
 
 test("author-in-text citation with locator", () => {
   expect(micromark("@id [locator]", opts)).eq(
-    '<p><citeInText "@id [locator]"><idPrefix "@"></idPrefix><id "id"></id><space " "></space><locatorOuter "[locator]"><open "["></open><locator "locator"></locator><close "]"></close></locatorOuter></citeInText></p>',
+    '<p><cite inText "@id [locator]"><item "@id [locator]"><idPrefix "@"></idPrefix><id "id"></id><space " "></space><locatorOuter "[locator]"><open "["></open><locator "locator"></locator><close "]"></close></locatorOuter></item></cite></p>',
   );
 });
 
