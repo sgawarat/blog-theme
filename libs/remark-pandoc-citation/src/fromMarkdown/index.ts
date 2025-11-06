@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-import type { Data, Parent, Text } from "mdast";
-import type { Extension, Handle, Token } from "mdast-util-from-markdown";
+import type { Data, Node, Parent } from "mdast";
+import type { Extension, Token } from "mdast-util-from-markdown";
 import type {} from "mdast-util-to-hast";
 
 declare module "mdast" {
@@ -15,38 +15,21 @@ declare module "mdast" {
   }
 }
 
-function enterPandocCitation(inText: boolean): Handle {
-  return function (this, token) {
-    this.enter(
-      {
-        type: "pandocCitation",
-        children: [],
-        data: {
-          _pandocCitationInText: inText,
-        },
-      },
-      token,
-    );
-  };
-}
-
 interface PandocCitationContentMap {
   pandocCitationItem: PandocCitationItem;
-}
-
-interface PandocCitationItemContentMap {
-  pandocCitationItemAuthor: Text;
-  pandocCitationItemDate: Text;
 }
 
 export type PandocCitationContent =
   PandocCitationContentMap[keyof PandocCitationContentMap];
 
-export type PandocCitationItemContent =
-  PandocCitationItemContentMap[keyof PandocCitationItemContentMap];
-
 export interface PandocCitationData extends Data {
   _pandocCitationInText: boolean;
+}
+
+export interface PandocCitation extends Parent {
+  type: "pandocCitation";
+  children: PandocCitationContent[];
+  data: PandocCitationData;
 }
 
 export interface PandocCitationItemData extends Data {
@@ -57,28 +40,30 @@ export interface PandocCitationItemData extends Data {
   _pandocCitationSuffix?: string | undefined;
 }
 
-export interface PandocCitation extends Parent {
-  type: "pandocCitation";
-  children: PandocCitationContent[];
-  data: PandocCitationData;
-}
-
-export interface PandocCitationItem extends Parent {
+export interface PandocCitationItem extends Node {
   type: "pandocCitationItem";
-  children: PandocCitationItemContent[];
   data: PandocCitationItemData;
 }
 
 export function pandocCitationFromMarkdown(): Extension {
   return {
     enter: {
-      pandocCitation: enterPandocCitation(false),
-      pandocCitationInText: enterPandocCitation(true),
+      pandocCitation(token) {
+        this.enter(
+          {
+            type: "pandocCitation",
+            children: [],
+            data: {
+              _pandocCitationInText: token._pandocCitationInText ?? false,
+            },
+          },
+          token,
+        );
+      },
       pandocCitationItem(token) {
         this.enter(
           {
             type: "pandocCitationItem",
-            children: [],
             data: {},
           },
           token,
@@ -102,6 +87,12 @@ export function pandocCitationFromMarkdown(): Extension {
           node.data._pandocCitationId = this.sliceSerialize(token);
         }
       },
+      pandocCitationLocatorOuter(_token) {
+        const node = this.stack.at(-1);
+        if (node?.type === "pandocCitationItem") {
+          node.data._pandocCitationLocator = "";
+        }
+      },
       pandocCitationLocator(token) {
         const node = this.stack.at(-1);
         if (node?.type === "pandocCitationItem") {
@@ -111,7 +102,7 @@ export function pandocCitationFromMarkdown(): Extension {
       pandocCitationSuffix(token) {
         const node = this.stack.at(-1);
         if (node?.type === "pandocCitationItem") {
-          node.data._pandocCitationId = this.sliceSerialize(token);
+          node.data._pandocCitationSuffix = this.sliceSerialize(token);
         }
       },
     },
