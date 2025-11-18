@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import { dirname } from "node:path";
 import type { Root } from "mdast";
 import type { Extension as FromMarkdownExtension } from "mdast-util-from-markdown";
 import type { Extension as MicromarkExtension } from "micromark-util-types";
@@ -45,7 +46,7 @@ export const remarkPandocCitation: Plugin<[PandocCitationRemarkOptions], Root> =
       if (isRecord(astro)) {
         const frontmatter = astro["frontmatter"];
         if (isRecord(frontmatter)) {
-          citeproc.addItemsFromFrontmatter(frontmatter);
+          citeproc.addItemsFromFrontmatter(frontmatter, dirname(vfile.path));
         }
       }
 

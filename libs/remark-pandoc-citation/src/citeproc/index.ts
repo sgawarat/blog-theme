@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 import fs from "node:fs";
+import { isAbsolute, resolve } from "node:path";
+import process from "node:process";
 import type { ElementContent } from "hast";
 import type { CslCitation, CslData, CslDataItem } from "./schema.ts";
 import type { CitationStyle } from "./style.ts";
@@ -33,10 +35,16 @@ export class Citeproc {
     this.addItemsFromJson(items);
   }
 
-  addItemsFromFrontmatter(frontmatter: Frontmatter | Record<string, unknown>) {
+  addItemsFromFrontmatter(
+    frontmatter: Frontmatter | Record<string, unknown>,
+    sourceDir: string = process.cwd(),
+  ) {
     const bibliography = frontmatter["bibliography"];
     if (typeof bibliography === "string") {
-      this.addItemsFromFile(bibliography);
+      const path = isAbsolute(bibliography)
+        ? bibliography
+        : resolve(sourceDir, bibliography);
+      this.addItemsFromFile(path);
     }
 
     const references = frontmatter["references"];
