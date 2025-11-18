@@ -8,6 +8,6 @@
     "libs": "pnpm --filter ./libs/**"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.1"
+    "@biomejs/biome": "^2.3.6"
   }
 }

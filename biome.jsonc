@@ -1,7 +1,7 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.6/schema.json",
   "files": {
-    "includes": ["**", "!node_modules", "!dist"]
+    "includes": ["**", "!**/node_modules/**/*", "!**/dist/**/*"]
   },
   "vcs": {
     "useIgnoreFile": true
@@ -53,7 +53,20 @@
           },
           "style": {
             // 一行のif文を許可したい
-            "useBlockStatements": "off"
+            "useBlockStatements": "off",
+
+            // CSL-JSONがケバブケースやスネークケースを使うので
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noMagicNumbers": "off"
           }
         }
       }
