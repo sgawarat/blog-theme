@@ -1,5 +1,6 @@
+// SPDX-License-Identifier: MIT
 import type { ElementContent } from "hast";
-import type { CslCitationItem } from "../schema.ts";
+import type { CslCitationItem } from "./schema.ts";
 
 export abstract class CitationStyle {
   abstract getCitation(items: CslCitationItem[]): ElementContent[];

@@ -31,12 +31,10 @@
     "resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
     "outDir": "${configDir}/dist",
-    "allowSyntheticDefaultImports": true,
     "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "isolatedDeclarations": true,
     "verbatimModuleSyntax": true,
-    "experimentalDecorators": true,
     "lib": [
       "ESNext"
     ],

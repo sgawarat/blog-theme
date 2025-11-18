@@ -1,9 +1,14 @@
 // SPDX-License-Identifier: MIT
 import fs from "node:fs";
 import type { ElementContent } from "hast";
-import type { CslCitation, CslDataItem } from "./schema.ts";
-import type { CitationStyle } from "./style/index.ts";
+import type { CslCitation, CslData, CslDataItem } from "./schema.ts";
+import type { CitationStyle } from "./style.ts";
 import { parseCslData } from "./validation.ts";
+
+export interface Frontmatter {
+  bibliography?: string | undefined;
+  references?: CslData | undefined;
+}
 
 export class Citeproc {
   private readonly _map = new Map<string, CslDataItem>();
@@ -28,7 +33,7 @@ export class Citeproc {
     this.addItemsFromJson(items);
   }
 
-  addItemsFromFrontmatter(frontmatter: Record<string, unknown>) {
+  addItemsFromFrontmatter(frontmatter: Frontmatter | Record<string, unknown>) {
     const bibliography = frontmatter["bibliography"];
     if (typeof bibliography === "string") {
       this.addItemsFromFile(bibliography);

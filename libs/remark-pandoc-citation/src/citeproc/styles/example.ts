@@ -1,13 +1,14 @@
-import { CitationStyle } from "./index.ts";
+// SPDX-License-Identifier: MIT
+import type { ElementContent } from "hast";
 import type {
+  CslCitationItem,
+  CslDataDate,
   CslDataItem,
   CslDataName,
-  CslDataDate,
-  CslCitationItem,
 } from "../schema.ts";
-import type { ElementContent } from "hast";
+import { CitationStyle } from "../style.ts";
 
-const INITIAL_REGEXP = /(\p{Lu})\p{Ll}+/u;
+const INITIAL_REGEXP = /(\p{Lu})\p{Ll}+/gu;
 const LAST_LETTER_REGEXP = /\p{L}$/u;
 
 function makeNameLong(name: CslDataName | undefined): string {
@@ -76,10 +77,10 @@ function makeNamesLong(names: CslDataName[]): string {
 function makeDateShort(date: CslDataDate | undefined): string {
   if (date === undefined) return "";
   if (date["date-parts"] !== undefined) {
-    const year = date["date-parts"][0]?.[0] ?? "";
+    const year = date["date-parts"][0]?.[0] ?? "0000";
     return `${year}`;
   }
-  return "";
+  return "0000";
 }
 
 function makePlain(item: CslCitationItem): string {
@@ -97,58 +98,171 @@ function makeAuthorShort(item: CslDataItem | undefined): string {
   return item.publisher ?? item["container-title"] ?? "";
 }
 
+function makeAuthorLong(item: CslDataItem | undefined): string {
+  if (item === undefined) return "";
+  if (item.author) return makeNamesLong(item.author);
+  return item.publisher ?? "";
+}
+
 const opening: ElementContent = { type: "text", value: "[" };
 const closing: ElementContent = { type: "text", value: "]" };
-const comma: ElementContent = { type: "text", value: ", " };
+const commaSpace: ElementContent = { type: "text", value: ", " };
 const space: ElementContent = { type: "text", value: " " };
+const dot: ElementContent = { type: "text", value: "." };
 
-function makeCitationPrefix(item: CslCitationItem): ElementContent[] {
-  const nodes: ElementContent[] = [];
+function makeText(value: string): ElementContent {
+  return { type: "text", value };
+}
+
+function makeCiteTag(value: string): ElementContent {
+  return {
+    type: "element",
+    tagName: "cite",
+    properties: {},
+    children: [makeText(value)],
+  };
+}
+
+function makeExternalLink(
+  href: string,
+  text?: string | undefined,
+): ElementContent {
+  return {
+    type: "element",
+    tagName: "a",
+    properties: {
+      href,
+      rel: "noopener noreferrer nofollow external",
+      target: "_blank",
+    },
+    children: [makeText(text ?? href)],
+  };
+}
+
+function makeCitationPrefix(
+  nodes: ElementContent[],
+  item: CslCitationItem,
+): ElementContent[] {
   if (item.prefix) {
-    nodes.push({ type: "text", value: item.prefix });
+    if (nodes.length > 0) nodes.push(space);
+    nodes.push(makeText(item.prefix));
   }
   if (!item["suppress-author"]) {
     const author = makeAuthorShort(item.itemData);
     if (author) {
       if (nodes.length > 0) nodes.push(space);
-      nodes.push({ type: "text", value: author });
+      nodes.push(makeText(author));
     }
   }
   return nodes;
 }
 
-function makeCitationSuffix(item: CslCitationItem): ElementContent[] {
-  const nodes: ElementContent[] = [];
+function makeCitationSuffix(
+  nodes: ElementContent[],
+  item: CslCitationItem,
+): ElementContent[] {
   const date = makeDateShort(item.itemData?.issued);
   if (date) {
-    nodes.push({ type: "text", value: date });
+    if (nodes.length > 0) nodes.push(space);
+    nodes.push(makeText(date));
   }
   if (item.locator || item.suffix) {
-    let delim = comma;
+    let delim = commaSpace;
     if (item.locator) {
       if (nodes.length > 0) nodes.push(delim);
-      nodes.push({ type: "text", value: item.locator });
+      nodes.push(makeText(item.locator));
       delim = space;
     }
     if (item.suffix) {
       if (nodes.length > 0) nodes.push(delim);
-      nodes.push({ type: "text", value: item.suffix });
+      nodes.push(makeText(item.suffix));
     }
   }
   return nodes;
 }
 
+const DOI_REGEXP = /10\.\d+\/.+/;
+
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: TODO
+// biome-ignore lint/complexity/noExcessiveLinesPerFunction: TODO
+function makeBibliography(item: CslDataItem): ElementContent {
+  const children: ElementContent[] = [];
+  let delim: ElementContent | undefined;
+  const addDelimiter = (next: ElementContent | undefined) => {
+    if (delim !== undefined) children.push(delim);
+    delim = next;
+  };
+
+  if (item.author) {
+    addDelimiter(space);
+    children.push(makeText(makeAuthorLong(item)));
+  }
+  if (item.issued) {
+    addDelimiter(space);
+    children.push(makeText(makeDateShort(item.issued)), dot);
+  }
+  if (item.title) {
+    addDelimiter(space);
+    children.push(makeText(item.title), dot);
+  }
+  if (item["container-title"]) {
+    addDelimiter(space);
+    children.push(makeCiteTag(item["container-title"]));
+    if (item.volume) {
+      addDelimiter(commaSpace);
+      children.push(makeText(`${item.volume}`));
+    }
+    if (item.issue) {
+      addDelimiter(commaSpace);
+      children.push(makeText(`${item.issue}`));
+    }
+    if (item.page) {
+      addDelimiter(commaSpace);
+      children.push(makeText(`${item.page}`));
+    }
+    delim = dot;
+    addDelimiter(space);
+  }
+  if (item["event-title"]) {
+    addDelimiter(space);
+    children.push(makeText(item["event-title"]), dot);
+  }
+  if (item.DOI) {
+    addDelimiter(space);
+    if (URL.canParse(item.DOI)) {
+      children.push(makeExternalLink(item.DOI), dot);
+    } else if (DOI_REGEXP.test(item.DOI)) {
+      children.push(
+        makeExternalLink(`https://doi.org/${item.DOI}`, item.DOI),
+        dot,
+      );
+    } else {
+      children.push(makeText(item.DOI), dot);
+    }
+  }
+  if (item.URL) {
+    addDelimiter(space);
+    if (URL.canParse(item.URL)) {
+      children.push(makeExternalLink(item.URL), dot);
+    } else {
+      children.push(makeText(item.URL), dot);
+    }
+  }
+  return {
+    type: "element",
+    tagName: "span",
+    properties: {
+      hidden: true,
+      class: "bibliography",
+    },
+    children,
+  };
+}
+
 function makeCitation(item: CslCitationItem): ElementContent[] {
   if (item.itemData === undefined) {
-    return [
-      {
-        type: "text",
-        value: makePlain(item),
-      },
-    ];
+    return [makeText(makePlain(item))];
   }
-  const prefix = makeCitationPrefix(item);
-  const suffix = makeCitationSuffix(item);
   return [
     {
       type: "element",
@@ -156,25 +270,23 @@ function makeCitation(item: CslCitationItem): ElementContent[] {
       properties: {
         class: "citation-item",
       },
-      children: prefix.length === 0 ? suffix : [...prefix, space, ...suffix],
+      children: [
+        ...makeCitationSuffix(makeCitationPrefix([], item), item),
+        makeBibliography(item.itemData),
+      ],
     },
   ];
 }
 
 function makeCitationInText(item: CslCitationItem): ElementContent[] {
   if (item.itemData === undefined) {
-    return [
-      {
-        type: "text",
-        value: makePlain(item),
-      },
-    ];
+    return [makeText(makePlain(item))];
   }
-  const prefix = makeCitationPrefix(item);
-  const suffix = makeCitationSuffix(item);
+  const prefix = makeCitationPrefix([], item);
+  const suffix = makeCitationSuffix([], item);
   return [
     ...prefix,
-    ...(prefix.length === 0 ? [] : [space]),
+    ...(prefix.length > 0 ? [space] : []),
     opening,
     {
       type: "element",
@@ -182,7 +294,7 @@ function makeCitationInText(item: CslCitationItem): ElementContent[] {
       properties: {
         class: "citation-item",
       },
-      children: suffix,
+      children: [...suffix, makeBibliography(item.itemData)],
     },
     closing,
   ];
@@ -196,7 +308,7 @@ export class MyCitationStyle extends CitationStyle {
       ...items
         .slice(1)
         .flatMap((item): ElementContent[] => [
-          { type: "text", value: "; " },
+          makeText("; "),
           ...makeCitation(item),
         ]),
       closing,
@@ -209,7 +321,7 @@ export class MyCitationStyle extends CitationStyle {
       ...items
         .slice(1)
         .flatMap((item): ElementContent[] => [
-          { type: "text", value: "; " },
+          makeText("; "),
           ...makeCitationInText(item),
         ]),
     ];

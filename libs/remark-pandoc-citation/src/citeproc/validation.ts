@@ -8,7 +8,7 @@ import cslDataJsonSchema from "./schema/csl-data.json" with { type: "json" };
 import type { CslCitation, CslData } from "./schema.ts";
 
 const ajv = new Ajv({ allErrors: true });
-ajvErrors(ajv);
+ajvErrors.default(ajv);
 
 const isCslData: ValidateFunction<CslData> =
   ajv.compile<CslData>(cslDataJsonSchema);
