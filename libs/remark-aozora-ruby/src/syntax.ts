@@ -180,9 +180,9 @@ export function aozoraRubySyntax(
   opts?: AozoraRubySyntaxOptions | undefined,
 ): Extension {
   const config = {
-    prefix: opts?.prefix.charCodeAt(0) ?? defaultConfig.prefix,
-    opening: opts?.opening.charCodeAt(0) ?? defaultConfig.opening,
-    closing: opts?.closing.charCodeAt(0) ?? defaultConfig.closing,
+    prefix: opts?.prefix?.charCodeAt(0) ?? defaultConfig.prefix,
+    opening: opts?.opening?.charCodeAt(0) ?? defaultConfig.opening,
+    closing: opts?.closing?.charCodeAt(0) ?? defaultConfig.closing,
   };
   return {
     text: {

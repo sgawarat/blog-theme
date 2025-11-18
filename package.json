@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "apps": "pnpm --filter ./apps/**",
-    "libs": "pnpm --filter ./libs/**"
+    "libs": "pnpm --filter ./libs/**",
+    "libs:build": "pnpm --filter ./libs/** build"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.6"
