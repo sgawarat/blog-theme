@@ -20,7 +20,7 @@ export function scanAnyText(
   input: string,
 ): [string, string] {
   const m = ANY_REGEXP.exec(input);
-  if (m === null || m.groups === undefined) return ["", ""];
+  if (m?.groups === undefined) return ["", ""];
   if (m.groups["han"] !== undefined) {
     ctx.next = scanHanText;
   } else if (m.groups["kana"] !== undefined) {
@@ -55,7 +55,7 @@ export function scanKanaText(
   input: string,
 ): [string, string] {
   const m = KANA_REGEXP.exec(input);
-  if (m === null || m.groups === undefined) return ["", ""];
+  if (m?.groups === undefined) return ["", ""];
   if (m.groups["hiragana"] !== undefined) {
     ctx.next = scanHiraganaText;
   } else if (m.groups["katakana"] !== undefined) {
