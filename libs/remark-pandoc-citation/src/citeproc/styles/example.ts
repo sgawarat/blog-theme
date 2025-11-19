@@ -252,8 +252,7 @@ function makeBibliography(item: CslDataItem): ElementContent {
     type: "element",
     tagName: "span",
     properties: {
-      hidden: true,
-      class: "bibliography",
+      class: "bibliography tooltip-content",
     },
     children,
   };
@@ -268,7 +267,7 @@ function makeCitation(item: CslCitationItem): ElementContent[] {
       type: "element",
       tagName: "span",
       properties: {
-        class: "citation-item",
+        class: "citation-item tooltip",
       },
       children: [
         ...makeCitationSuffix(makeCitationPrefix([], item), item),
@@ -292,7 +291,7 @@ function makeCitationInText(item: CslCitationItem): ElementContent[] {
       type: "element",
       tagName: "span",
       properties: {
-        class: "citation-item",
+        class: "citation-item tooltip",
       },
       children: [...suffix, makeBibliography(item.itemData)],
     },
