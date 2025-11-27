@@ -11,10 +11,7 @@
       ]
     },
     "citationID": {
-      "type": [
-        "string",
-        "number"
-      ]
+      "type": ["string", "number"]
     },
     "citationItems": {
       "type": "array",
@@ -22,10 +19,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "number"
-            ]
+            "type": ["string", "number"]
           },
           "itemData": {
             "$ref": "https://resource.citationstyles.org/schema/v1.0/input/json/csl-data.json#/items"
@@ -74,18 +68,10 @@
             ]
           },
           "suppress-author": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
+            "type": ["string", "number", "boolean"]
           },
           "author-only": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
+            "type": ["string", "number", "boolean"]
           },
           "uris": {
             "type": "array",
@@ -94,9 +80,7 @@
             }
           }
         },
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "additionalProperties": false
       }
     },
@@ -110,9 +94,6 @@
       "additionalProperties": false
     }
   },
-  "required": [
-    "schema",
-    "citationID"
-  ],
+  "required": ["schema", "citationID"],
   "additionalProperties": false
 }

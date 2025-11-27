@@ -57,10 +57,7 @@
         ]
       },
       "id": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "citation-key": {
         "type": "string"
@@ -279,25 +276,16 @@
         "type": "string"
       },
       "chapter-number": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "citation-number": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "citation-label": {
         "type": "string"
       },
       "collection-number": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "collection-title": {
         "type": "string"
@@ -318,10 +306,7 @@
         "type": "string"
       },
       "edition": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "event": {
         "description": "[Deprecated - use 'event-title' instead. Will be removed in 1.1]",
@@ -334,10 +319,7 @@
         "type": "string"
       },
       "first-reference-note-number": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "genre": {
         "type": "string"
@@ -349,10 +331,7 @@
         "type": "string"
       },
       "issue": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "jurisdiction": {
         "type": "string"
@@ -361,10 +340,7 @@
         "type": "string"
       },
       "locator": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "medium": {
         "type": "string"
@@ -373,22 +349,13 @@
         "type": "string"
       },
       "number": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "number-of-pages": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "number-of-volumes": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "original-publisher": {
         "type": "string"
@@ -400,22 +367,13 @@
         "type": "string"
       },
       "page": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "page-first": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "part": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "part-title": {
         "type": "string"
@@ -427,10 +385,7 @@
         "type": "string"
       },
       "printing": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "publisher": {
         "type": "string"
@@ -460,10 +415,7 @@
         "type": "string"
       },
       "supplement": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "title": {
         "type": "string"
@@ -478,10 +430,7 @@
         "type": "string"
       },
       "volume": {
-        "type": [
-          "string",
-          "number"
-        ]
+        "type": ["string", "number"]
       },
       "volume-title": {
         "type": "string"
@@ -499,9 +448,7 @@
         "examples": [
           {
             "short_id": "xyz",
-            "other-ids": [
-              "alternative-id"
-            ]
+            "other-ids": ["alternative-id"]
           },
           {
             "metadata-double-checked": true
@@ -509,10 +456,7 @@
         ]
       }
     },
-    "required": [
-      "type",
-      "id"
-    ],
+    "required": ["type", "id"],
     "additionalProperties": false
   },
   "definitions": {
@@ -537,28 +481,16 @@
               "type": "string"
             },
             "comma-suffix": {
-              "type": [
-                "string",
-                "number",
-                "boolean"
-              ]
+              "type": ["string", "number", "boolean"]
             },
             "static-ordering": {
-              "type": [
-                "string",
-                "number",
-                "boolean"
-              ]
+              "type": ["string", "number", "boolean"]
             },
             "literal": {
               "type": "string"
             },
             "parse-names": {
-              "type": [
-                "string",
-                "number",
-                "boolean"
-              ]
+              "type": ["string", "number", "boolean"]
             }
           },
           "additionalProperties": false
@@ -577,10 +509,7 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "type": [
-                    "string",
-                    "number"
-                  ]
+                  "type": ["string", "number"]
                 },
                 "minItems": 1,
                 "maxItems": 3
@@ -589,17 +518,10 @@
               "maxItems": 2
             },
             "season": {
-              "type": [
-                "string",
-                "number"
-              ]
+              "type": ["string", "number"]
             },
             "circa": {
-              "type": [
-                "string",
-                "number",
-                "boolean"
-              ]
+              "type": ["string", "number", "boolean"]
             },
             "literal": {
               "type": "string"
