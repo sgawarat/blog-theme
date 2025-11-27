@@ -33,6 +33,7 @@
     "lib": ["ESNext"],
     "composite": true,
     "skipLibCheck": true,
-    "rootDir": "${configDir}/src"
+    "rootDir": "${configDir}/src",
+    "tsBuildInfoFile": "${configDir}/dist/.tsbuildinfo"
   }
 }
