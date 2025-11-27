@@ -32,6 +32,7 @@
     "verbatimModuleSyntax": true,
     "lib": ["ESNext"],
     "composite": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "rootDir": "${configDir}/src"
   }
 }
