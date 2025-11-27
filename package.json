@@ -6,9 +6,11 @@
   "scripts": {
     "apps": "pnpm --filter ./apps/**",
     "libs": "pnpm --filter ./libs/**",
-    "libs:build": "pnpm --filter ./libs/** build"
+    "libs:build": "pnpm --filter ./libs/** build",
+    "ci:publish": "pnpm publish -r --access=public"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.6"
+    "@biomejs/biome": "^2.3.7",
+    "@changesets/cli": "^2.29.7"
   }
 }
