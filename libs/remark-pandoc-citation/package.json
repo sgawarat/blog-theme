@@ -1,7 +1,7 @@
 {
   "name": "@sgawarat/remark-pandoc-citation",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A remark plugin to add support for Pandoc-style citation syntax, like `[@CitationID]`.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
