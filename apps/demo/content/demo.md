@@ -15,6 +15,8 @@ bibliography: bibliography.json
 
 ## コード
 
+`インライン`
+
 ```js
 // コードブロック
 function foo() {
