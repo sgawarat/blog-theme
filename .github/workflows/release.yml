@@ -42,3 +42,5 @@ jobs:
           title: "chore: update versions"
           version: pnpm ci:version
           publish: pnpm ci:publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
