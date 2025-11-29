@@ -1,4 +1,0 @@
-[submodule "apps/web"]
-	path = apps/web
-	url = https://github.com/sgawarat/astro-paper.git
-	branch = theme
