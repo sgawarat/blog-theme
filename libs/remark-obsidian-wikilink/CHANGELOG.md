@@ -1,5 +1,11 @@
 # @sgawarat/remark-obsidian-wikilink
 
+## 0.1.3
+
+### Patch Changes
+
+- 2759f40: Add prepare command
+
 ## 0.1.2
 
 ### Patch Changes
