@@ -1,7 +1,7 @@
 {
   "name": "@sgawarat/remark-obsidian-wikilink",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A remark plugin to add support for Obsidian-style wikilink syntax, like `[[path#heading|text]]`.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
