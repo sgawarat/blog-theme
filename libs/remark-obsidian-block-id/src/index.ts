@@ -1,8 +1,15 @@
 // SPDX-License-Identifier: MIT
-import type { Data, Parent, Root, RootContent } from "mdast";
+import type {
+  Data,
+  Heading,
+  Paragraph,
+  Parent,
+  Root,
+  RootContent,
+} from "mdast";
 import type {} from "mdast-util-to-hast";
 import type { Plugin } from "unified";
-import { CONTINUE, SKIP, visit } from "unist-util-visit";
+import { CONTINUE, type VisitorResult, visit } from "unist-util-visit";
 
 declare module "mdast" {
   interface PhrasingContentMap {
@@ -51,6 +58,51 @@ function applyId(
   };
 }
 
+function visitParagraph(
+  node: Paragraph,
+  index: number,
+  parent: Parent,
+  intrusive?: boolean | undefined,
+): VisitorResult {
+  const child = node.children.at(-1);
+  if (child?.type === "text") {
+    const m = child.value.match(BLOCK_ID_REGEXP);
+    if (m !== null) {
+      if (m[1] === undefined) {
+        // 段落に構文のみがあるなら、その直前の要素にIDを付与する
+        if (node.children.length === 1 && index > 0) {
+          applyId(parent.children, index - 1, m[2] ?? "", intrusive);
+          parent.children.splice(index, 1);
+          return [CONTINUE, index];
+        }
+      } else {
+        // 段落の末尾に構文があるなら、その段落自体にIDを付与する
+        child.value = m[1];
+        applyId(parent.children, index, m[2] ?? "", intrusive);
+      }
+    }
+  }
+  return CONTINUE;
+}
+
+function visitHeading(
+  node: Heading,
+  index: number,
+  parent: Parent,
+  intrusive: boolean | undefined,
+): VisitorResult {
+  const child = node.children.at(-1);
+  if (child?.type === "text") {
+    const m = child.value.match(BLOCK_ID_REGEXP);
+    if (m !== null && m[1] !== undefined) {
+      // 末尾に構文があるなら、その自体にIDを付与する
+      child.value = m[1];
+      applyId(parent.children, index, m[2] ?? "", intrusive);
+    }
+  }
+  return CONTINUE;
+}
+
 export interface RemarkObsidianBlockIdOptions {
   /** 既存のタグにIDを付与するか */
   intrusive?: boolean | undefined;
@@ -61,53 +113,20 @@ export const remarkObsidianBlockId: Plugin<
   Root
 > = (opts?) => (tree) => {
   // 構文からIDを取り出して直前の要素に付与する
-  visit(tree, (node, index, parent) => {
+  visit(tree, (node, index, parent): VisitorResult => {
     if (index === undefined || parent === undefined) return;
 
     switch (node.type) {
       case "paragraph": {
-        const child = node.children.at(-1);
-        if (child?.type === "text") {
-          const m = child.value.match(BLOCK_ID_REGEXP);
-          if (m !== null) {
-            if (m[1] === undefined) {
-              // 段落に構文のみがあるなら、その直前の要素にIDを付与する
-              if (node.children.length === 1 && index > 0) {
-                applyId(
-                  parent.children,
-                  index - 1,
-                  m[2] ?? "",
-                  opts?.intrusive,
-                );
-                parent.children.splice(index, 1);
-                return [CONTINUE, index];
-              }
-            } else {
-              // 段落の末尾に構文があるなら、その段落自体にIDを付与する
-              child.value = m[1];
-              applyId(parent.children, index, m[2] ?? "", opts?.intrusive);
-            }
-          }
-        }
-        break;
+        return visitParagraph(node, index, parent, opts?.intrusive);
       }
       case "heading": {
-        const child = node.children.at(-1);
-        if (child?.type === "text") {
-          const m = child.value.match(BLOCK_ID_REGEXP);
-          if (m !== null && m[1] !== undefined) {
-            // 末尾に構文があるなら、その自体にIDを付与する
-            child.value = m[1];
-            applyId(parent.children, index, m[2] ?? "", opts?.intrusive);
-          }
-        }
-        break;
+        return visitHeading(node, index, parent, opts?.intrusive);
       }
       default: {
         // not supported
-        break;
+        return CONTINUE;
       }
     }
-    return CONTINUE;
   });
 };
