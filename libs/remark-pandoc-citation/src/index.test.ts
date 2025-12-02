@@ -37,6 +37,6 @@ function parsed(value: string) {
 
 test("citation", () => {
   expect(parsed("[prefix @id suffix]")).eq(
-    '<p><span class="citation">[<span class="citation-item">prefix Family 2025, suffix<span hidden class="bibliography">Family, G. 2025.</span></span>]</span></p>',
+    '<p><span class="citation">[<span class="citation-item tooltip">prefix Family 2025, suffix<span class="bibliography tooltip-content">Family, G. 2025.</span></span>]</span></p>',
   );
 });

@@ -72,7 +72,7 @@ function citationItem(children: ElementContent[]): ElementContent {
     type: "element",
     tagName: "span",
     properties: {
-      class: "citation-item",
+      class: "citation-item tooltip",
     },
     children,
   };
@@ -83,8 +83,7 @@ function bibliography(children: ElementContent[]): ElementContent {
     type: "element",
     tagName: "span",
     properties: {
-      hidden: true,
-      class: "bibliography",
+      class: "bibliography tooltip-content",
     },
     children,
   };
