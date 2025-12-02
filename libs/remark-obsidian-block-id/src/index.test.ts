@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 import rehypeKatex from "rehype-katex";
 import rehypeStringify from "rehype-stringify";
 import remarkMath from "remark-math";
@@ -92,5 +93,11 @@ test("quote (intrusive)", () => {
 
   expect(parsedIntrusive("> quote ^id")).eq(
     '<blockquote>\n<p id="id">quote</p>\n</blockquote>',
+  );
+});
+
+test("multiple lines", () => {
+  expect(parsed("# heading\n\n^h1\n\nparagraph ^p\n")).eq(
+    '<div id="h1"><h1>heading</h1></div>\n<div id="p"><p>paragraph</p></div>',
   );
 });

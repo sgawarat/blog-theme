@@ -2,7 +2,7 @@
 import type { Data, Parent, Root, RootContent } from "mdast";
 import type {} from "mdast-util-to-hast";
 import type { Plugin } from "unified";
-import { CONTINUE, SKIP, visit } from "unist-util-visit";
+import { remove } from "unist-util-remove";
 
 declare module "mdast" {
   interface PhrasingContentMap {
@@ -23,17 +23,20 @@ interface ObsidianBlockId extends Parent {
 const BLOCK_ID_REGEXP = /^(?:(?<content>[\s\S]*)\s)?\^(?<id>[\w-]+)$/;
 
 function applyId(
-  node: RootContent,
+  nodes: RootContent[],
+  index: number,
   id: string,
   intrusive?: boolean | undefined,
-): RootContent {
+) {
+  const node = nodes[index];
+  if (node === undefined) return;
   if (intrusive && node.data?.hProperties?.["id"] === undefined) {
     node.data ??= {};
     node.data.hProperties ??= {};
     node.data.hProperties["id"] = id;
-    return node;
+    return;
   }
-  return {
+  nodes[index] = {
     type: "obsidianBlockId",
     children: [node],
     data: {
@@ -55,9 +58,12 @@ export const remarkObsidianBlockId: Plugin<
   Root
 > = (opts?) => (tree) => {
   // 構文からIDを取り出して直前の要素に付与する
-  visit(tree, (node, index, parent) => {
+  remove(tree, (unistNode, index, unistParent) => {
+    const node = unistNode as RootContent;
+    const parent = unistParent as Parent;
     if (index === undefined || parent === undefined) return;
 
+    let removed = false;
     switch (node.type) {
       case "paragraph": {
         const child = node.children.at(-1);
@@ -67,25 +73,18 @@ export const remarkObsidianBlockId: Plugin<
             if (m[1] === undefined) {
               // 段落に構文のみがあるなら、その直前の要素にIDを付与する
               if (node.children.length === 1 && index > 0) {
-                const prev = parent.children[index - 1];
-                if (prev !== undefined) {
-                  parent.children[index - 1] = applyId(
-                    prev,
-                    m[2] ?? "",
-                    opts?.intrusive,
-                  );
-                  parent.children.splice(index, 1);
-                  return SKIP;
-                }
+                applyId(
+                  parent.children,
+                  index - 1,
+                  m[2] ?? "",
+                  opts?.intrusive,
+                );
+                removed = true;
               }
             } else {
               // 段落の末尾に構文があるなら、その段落自体にIDを付与する
               child.value = m[1];
-              parent.children[index] = applyId(
-                node,
-                m[2] ?? "",
-                opts?.intrusive,
-              );
+              applyId(parent.children, index, m[2] ?? "", opts?.intrusive);
             }
           }
         }
@@ -98,7 +97,7 @@ export const remarkObsidianBlockId: Plugin<
           if (m !== null && m[1] !== undefined) {
             // 末尾に構文があるなら、その自体にIDを付与する
             child.value = m[1];
-            parent.children[index] = applyId(node, m[2] ?? "", opts?.intrusive);
+            applyId(parent.children, index, m[2] ?? "", opts?.intrusive);
           }
         }
         break;
@@ -108,6 +107,6 @@ export const remarkObsidianBlockId: Plugin<
         break;
       }
     }
-    return CONTINUE;
+    return removed;
   });
 };

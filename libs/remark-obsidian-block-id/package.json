@@ -47,6 +47,6 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "unist-util-visit": "^5.0.0"
+    "unist-util-remove": "^4.0.0"
   }
 }
