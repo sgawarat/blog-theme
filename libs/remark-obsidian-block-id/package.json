@@ -1,0 +1,52 @@
+{
+  "name": "@sgawarat/remark-obsidian-block-id",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "A remark plugin to add support for Obsidian's block ID syntax, like `^id`.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsgo",
+    "test": "vitest run",
+    "lint": "biome lint .",
+    "format": "biome format .",
+    "lint:write": "biome lint --write .",
+    "format:write": "biome format --write .",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "markdown",
+    "remark",
+    "remark-plugin",
+    "obsidian"
+  ],
+  "author": "sgawarat",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sgawarat/blog-theme.git",
+    "directory": "libs/remark-obsidian-block-id"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.8",
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^24.10.1",
+    "@typescript/native-preview": "7.0.0-dev.20251026.1",
+    "mdast-util-to-hast": "^13.2.1",
+    "rehype-katex": "^7.0.1",
+    "rehype-stringify": "^10.0.1",
+    "remark": "^15.0.1",
+    "remark-math": "^6.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "unified": "^11.0.5",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "unist-util-visit": "^5.0.0"
+  }
+}
