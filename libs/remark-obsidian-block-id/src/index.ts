@@ -2,7 +2,7 @@
 import type { Data, Parent, Root, RootContent } from "mdast";
 import type {} from "mdast-util-to-hast";
 import type { Plugin } from "unified";
-import { remove } from "unist-util-remove";
+import { CONTINUE, SKIP, visit } from "unist-util-visit";
 
 declare module "mdast" {
   interface PhrasingContentMap {
@@ -22,6 +22,9 @@ interface ObsidianBlockId extends Parent {
 
 const BLOCK_ID_REGEXP = /^(?:(?<content>[\s\S]*)\s)?\^(?<id>[\w-]+)$/;
 
+/**
+ * 指定のノードにIDを付与する
+ */
 function applyId(
   nodes: RootContent[],
   index: number,
@@ -58,12 +61,9 @@ export const remarkObsidianBlockId: Plugin<
   Root
 > = (opts?) => (tree) => {
   // 構文からIDを取り出して直前の要素に付与する
-  remove(tree, (unistNode, index, unistParent) => {
-    const node = unistNode as RootContent;
-    const parent = unistParent as Parent;
+  visit(tree, (node, index, parent) => {
     if (index === undefined || parent === undefined) return;
 
-    let removed = false;
     switch (node.type) {
       case "paragraph": {
         const child = node.children.at(-1);
@@ -79,7 +79,8 @@ export const remarkObsidianBlockId: Plugin<
                   m[2] ?? "",
                   opts?.intrusive,
                 );
-                removed = true;
+                parent.children.splice(index, 1);
+                return [CONTINUE, index];
               }
             } else {
               // 段落の末尾に構文があるなら、その段落自体にIDを付与する
@@ -107,6 +108,6 @@ export const remarkObsidianBlockId: Plugin<
         break;
       }
     }
-    return removed;
+    return CONTINUE;
   });
 };

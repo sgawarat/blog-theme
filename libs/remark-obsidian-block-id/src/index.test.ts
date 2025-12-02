@@ -10,7 +10,7 @@ import { remarkObsidianBlockId } from "./index.ts";
 
 const processor = unified()
   .use(remarkParse)
-  .use(remarkMath)
+  .use(remarkMath, { singleDollarTextMath: true })
   .use(remarkObsidianBlockId, {})
   .use(remarkRehype)
   .use(rehypeKatex, { output: "mathml" })
@@ -19,7 +19,7 @@ const processor = unified()
 
 const processorIntrusive = unified()
   .use(remarkParse)
-  .use(remarkMath)
+  .use(remarkMath, { singleDollarTextMath: true })
   .use(remarkObsidianBlockId, { intrusive: true })
   .use(remarkRehype)
   .use(rehypeKatex, { output: "mathml" })
@@ -99,5 +99,13 @@ test("quote (intrusive)", () => {
 test("multiple lines", () => {
   expect(parsed("# heading\n\n^h1\n\nparagraph ^p\n")).eq(
     '<div id="h1"><h1>heading</h1></div>\n<div id="p"><p>paragraph</p></div>',
+  );
+});
+
+test("example", () => {
+  expect(
+    parsed("# h1\n\n^h1\n\n## h2\n\n^h2\n\nparagraph ^p\n\n$$x$$\n\n^math\n"),
+  ).eq(
+    '<div id="h1"><h1>h1</h1></div>\n<div id="h2"><h2>h2</h2></div>\n<div id="p"><p>paragraph</p></div>\n<div id="math"><p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span></p></div>',
   );
 });
