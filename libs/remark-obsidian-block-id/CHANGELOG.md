@@ -1,5 +1,11 @@
 # @sgawarat/remark-obsidian-block-id
 
+## 0.1.3
+
+### Patch Changes
+
+- 4758a7c: Bump
+
 ## 0.1.2
 
 ### Patch Changes
