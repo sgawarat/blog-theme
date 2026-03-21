@@ -1,5 +1,11 @@
 # @sgawarat/remark-pandoc-citation
 
+## 0.1.4
+
+### Patch Changes
+
+- 4758a7c: Bump
+
 ## 0.1.3
 
 ### Patch Changes
