@@ -37,7 +37,7 @@
     "@typescript/native-preview": "7.0.0-dev.20251026.1",
     "micromark": "^4.0.2",
     "remark": "^15.0.1",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "@types/mdast": "^4.0.4",
