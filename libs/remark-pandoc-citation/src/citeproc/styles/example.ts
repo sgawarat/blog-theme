@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+/** biome-ignore-all lint/style/noExcessiveLinesPerFile: sorry */
 import type { ElementContent } from "hast";
 import type {
   CslCitationItem,
@@ -132,7 +133,7 @@ function makeExternalLink(
     tagName: "a",
     properties: {
       href,
-      rel: "noopener noreferrer nofollow external",
+      rel: ["noopener", "noreferrer", "nofollow", "external"],
       target: "_blank",
     },
     children: [makeText(text ?? href)],

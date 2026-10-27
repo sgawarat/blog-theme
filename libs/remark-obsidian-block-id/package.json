@@ -10,7 +10,7 @@
     "!dist/.tsbuildinfo"
   ],
   "scripts": {
-    "build": "tsgo",
+    "build": "tsc",
     "test": "vitest run",
     "lint": "biome lint .",
     "format": "biome format .",
@@ -32,10 +32,9 @@
     "directory": "libs/remark-obsidian-block-id"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.8",
+    "@biomejs/biome": "^2.6.3",
     "@types/mdast": "^4.0.4",
-    "@types/node": "^24.12.0",
-    "@typescript/native-preview": "7.0.0-dev.20251026.1",
+    "@types/node": "^26.6.5",
     "mdast-util-to-hast": "^13.2.1",
     "rehype-katex": "^7.0.1",
     "rehype-stringify": "^10.0.1",
@@ -43,10 +42,11 @@
     "remark-math": "^6.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
+    "typescript": "^7.0.2",
     "unified": "^11.0.5",
-    "vitest": "^3.2.4"
+    "vitest": "^5.0.5"
   },
   "dependencies": {
-    "unist-util-visit": "^5.1.0"
+    "unist-util-visit": "^5.2.0"
   }
 }

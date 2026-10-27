@@ -15,7 +15,7 @@ export function findShortestPath(
   name: string,
   rootDir: string,
   cwd: string = process.cwd(),
-) {
+): string | undefined {
   let minDepth = Number.POSITIVE_INFINITY;
   let shortestPath: string | undefined;
   for (const path of fs.globSync(resolve(rootDir, "**", name), { cwd })) {

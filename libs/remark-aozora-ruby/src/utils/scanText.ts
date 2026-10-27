@@ -106,7 +106,7 @@ export function scanLatinText(
 export class TextScanner {
   private readonly _ctx: TextScannerContext;
 
-  constructor(start = scanAnyText) {
+  constructor(start: typeof scanAnyText = scanAnyText) {
     this._ctx = { next: start };
   }
 

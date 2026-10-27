@@ -20,17 +20,17 @@ export class Citeproc {
     this._style = style;
   }
 
-  addItems(items: CslDataItem[]) {
+  addItems(items: CslDataItem[]): void {
     items.reduce((acc, item) => {
       return acc.set(`${item.id}`, item);
     }, this._map);
   }
 
-  addItemsFromJson(data: unknown) {
+  addItemsFromJson(data: unknown): void {
     this.addItems(parseCslData(data));
   }
 
-  addItemsFromFile(path: string) {
+  addItemsFromFile(path: string): void {
     const items = JSON.parse(fs.readFileSync(path, "utf-8"));
     this.addItemsFromJson(items);
   }
@@ -38,7 +38,7 @@ export class Citeproc {
   addItemsFromFrontmatter(
     frontmatter: Frontmatter | Record<string, unknown>,
     sourceDir: string = process.cwd(),
-  ) {
+  ): void {
     const bibliography = frontmatter["bibliography"];
     if (typeof bibliography === "string") {
       const path = isAbsolute(bibliography)

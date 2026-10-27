@@ -56,7 +56,7 @@ function anchor(href: string, text?: string | undefined): ElementContent {
     properties: {
       href,
       target: "_blank",
-      rel: "noopener noreferrer nofollow external",
+      rel: ["noopener", "noreferrer", "nofollow", "external"],
     },
     children: [
       {

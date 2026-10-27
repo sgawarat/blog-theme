@@ -7,3 +7,7 @@ onlyBuiltDependencies:
   - core-js
   - esbuild
   - sharp
+
+trustPolicy: no-downgrade
+minimumReleaseAge: 1440
+blockExoticSubdeps: true

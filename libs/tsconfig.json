@@ -34,6 +34,7 @@
     "composite": true,
     "skipLibCheck": true,
     "rootDir": "${configDir}/src",
-    "tsBuildInfoFile": "${configDir}/dist/.tsbuildinfo"
+    "tsBuildInfoFile": "${configDir}/dist/.tsbuildinfo",
+    "types": ["node"]
   }
 }
