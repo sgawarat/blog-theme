@@ -1,5 +1,11 @@
 # @sgawarat/remark-aozora-ruby
 
+## 0.1.5
+
+### Patch Changes
+
+- 2b9a7c1: bump
+
 ## 0.1.4
 
 ### Patch Changes
